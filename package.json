@@ -7,7 +7,8 @@
     "src": "src"
   },
   "scripts": {
-    "build": "ncc build index.js --no-source-map-register -o dist",
+    "build": "tsc",
+    "build:ncc": "ncc build index.js --no-source-map-register -o dist",
     "start": "node dist/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
@@ -29,7 +30,6 @@
   "homepage": "https://github.com/pedrox-hs/all-green-checks#readme",
   "dependencies": {
     "@actions/core": "^1.10.1",
-    "@actions/github": "^6.0.0",
     "@octokit/webhooks-types": "^7.3.1",
     "@probot/adapter-github-actions": "^3.1.3",
     "@vercel/ncc": "^0.38.1",
