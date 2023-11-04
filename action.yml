@@ -1,13 +1,20 @@
 name: "All Green Checks"
 description: "Action to verify run checks"
 author: "Pedro Silva"
+
 inputs:
   self-job-name:
     description: "Name of the job that will be used to check the status"
     default: ${{ github.job }}
+    required: true
   check-interval:
     description: "Interval between checks in seconds"
     default: "30"
+    required: true
+
 runs:
-  using: "docker"
-  image: "Dockerfile"
+  using: docker
+  image: Dockerfile
+  env:
+    INPUT_SELF-JOB-NAME: ${{ inputs.self-job-name }}
+    INPUT_CHECK-INTERVAL: ${{ inputs.check-interval }}

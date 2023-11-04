@@ -1,8 +1,11 @@
 FROM node:slim
 
+RUN mkdir -p /app
+WORKDIR /app
+
 COPY . .
 
 RUN npm install --omit=dev && \
   npm run build
 
-ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["node", "/app/dist/index.js"]

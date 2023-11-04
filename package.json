@@ -2,7 +2,7 @@
   "name": "all-green-checks",
   "version": "0.1.0",
   "description": "GitHub action to verify all checks",
-  "main": "index.js",
+  "main": "dist/index.js",
   "directories": {
     "src": "src"
   },

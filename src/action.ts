@@ -55,7 +55,7 @@ export class AllGreenAction {
     this.repository = repository
     this.checksRef = checksRef
     this.selfJobName = inputs.jobName
-    this.checkInterval = inputs.checkInterval
+    this.checkInterval = inputs.checkInterval * 1000
   }
 
   /**
@@ -154,7 +154,7 @@ export async function runAllGreenAction (
       repository,
       checksRef,
       {
-        jobName: core.getInput('job-name', { required: true }),
+        jobName: core.getInput('self-job-name', { required: true }),
         checkInterval: parseInt(core.getInput('check-interval', { trimWhitespace: true, required: true })),
       },
     )
