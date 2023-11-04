@@ -7,7 +7,7 @@
     "src": "src"
   },
   "scripts": {
-    "build": "ncc build index.js -mo dist",
+    "build": "ncc build index.js --no-source-map-register -o dist",
     "start": "node dist/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
