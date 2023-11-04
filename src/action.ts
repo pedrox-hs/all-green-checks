@@ -3,7 +3,12 @@ import { components } from '@octokit/openapi-types'
 import { Repository } from '@octokit/webhooks-types'
 import { Context } from 'probot'
 
-export type CheckRun = components['schemas']['check-run']
+type CheckRun = components['schemas']['check-run']
+
+type ActionInputs = {
+  jobName: string
+  checkInterval: number
+}
 
 /**
  * The AllGreenAction class
@@ -42,14 +47,15 @@ export class AllGreenAction {
    * @param context The context of the event
    * @param repository The repository of the event
    * @param checksRef The ref to check the checks for
+   * @param inputs The inputs for the action
    **/
-  constructor (context: Context, repository: Repository, checksRef: string) {
+  constructor (context: Context, repository: Repository, checksRef: string, inputs: ActionInputs) {
+    this.validateInputs(inputs)
     this.context = context
     this.repository = repository
     this.checksRef = checksRef
-    this.selfJobName = core.getInput('job-name')
-    this.checkInterval = parseInt(core.getInput('check-interval'))
-    this.validateInputs()
+    this.selfJobName = inputs.jobName
+    this.checkInterval = inputs.checkInterval
   }
 
   /**
@@ -60,14 +66,14 @@ export class AllGreenAction {
     await this.waitUntilAllChecksCompleted()
   }
 
-  private validateInputs () {
+  private validateInputs (inputs: ActionInputs) {
     // check if the interval is a number
-    if (isNaN(this.checkInterval)) {
+    if (isNaN(inputs.checkInterval)) {
       throw new Error('The `check-interval` must be a number')
     }
 
     // check if the interval is positive
-    if (this.checkInterval <= 0) {
+    if (inputs.checkInterval <= 0) {
       throw new Error('The `check-interval` must be positive')
     }
   }
@@ -78,13 +84,8 @@ export class AllGreenAction {
   private async waitUntilAllChecksCompleted () {
     let hasPendingChecks = true
     while (hasPendingChecks) {
-      try {
-        hasPendingChecks = !await this.isAllChecksCompleted()
-        await this.waitNextCheck()
-      } catch (error) {
-        this.setRunFailed(error)
-        break
-      }
+      hasPendingChecks = !await this.isAllChecksCompleted()
+      await this.waitNextCheck()
     }
   }
 
@@ -133,21 +134,6 @@ export class AllGreenAction {
   private async waitNextCheck () {
     await new Promise((resolve) => setTimeout(resolve, this.checkInterval))
   }
-
-  /**
-   * Set the run as failed
-   *
-   * @param error The error message or object
-   */
-  private setRunFailed (error: string | Error | unknown) {
-    let failureMessage = 'An error occurred while running checks'
-    if (error instanceof Error) {
-      failureMessage = error.message
-    } else if (typeof error === 'string') {
-      failureMessage = error
-    }
-    core.setFailed(failureMessage)
-  }
 }
 
 /**
@@ -157,7 +143,37 @@ export class AllGreenAction {
  * @param repository The repository of the event
  * @param checksRef The ref to check the checks for
  */
-export async function runAllGreenAction (context: Context, repository: Repository, checksRef: string) {
-  const allGreen = new AllGreenAction(context, repository, checksRef)
-  await allGreen.run()
+export async function runAllGreenAction (
+  context: Context,
+  repository: Repository,
+  checksRef: string,
+) {
+  try {
+    const allGreen = new AllGreenAction(
+      context,
+      repository,
+      checksRef,
+      {
+        jobName: core.getInput('job-name', { required: true }),
+        checkInterval: parseInt(core.getInput('check-interval', { trimWhitespace: true, required: true })),
+      },
+    )
+    await allGreen.run()
+  } catch (error) {
+    setRunFailed(error)
+  }
+}
+
+/**
+ * Set the run as failed
+ * @param error The error message or object
+ */
+function setRunFailed (error: string | Error | unknown) {
+  let failureMessage = 'An error occurred while running checks'
+  if (error instanceof Error) {
+    failureMessage = error.message
+  } else if (typeof error === 'string') {
+    failureMessage = error
+  }
+  core.setFailed(failureMessage)
 }
