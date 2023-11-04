@@ -1,0 +1,11 @@
+{
+  "action": "opened",
+  "number": 2,
+  "pull_request": {
+    "head": {
+      "label": "pedrox-hs:pedrox-hs-patch-1",
+      "ref": "pedrox-hs-patch-1",
+      "sha": "8f4fffb2fabee7d39b29d523c1d55ba28694eb46"
+    }
+  }
+}
