@@ -1,0 +1,29 @@
+name: Alls green
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review, labeled]
+
+concurrency:
+  group: alls-green-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  alls-green-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Wait on checks
+        uses: pedrox-hs/all-green-checks@main
+
+  dump-env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
