@@ -2,7 +2,7 @@ FROM node:slim
 
 COPY . .
 
-RUN npm install --production && \
+RUN npm install --omit=dev && \
   npm run build && \
   rm -rf node_modules
 
