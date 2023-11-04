@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Wait on checks
         uses: pedrox-hs/all-green-checks@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   dump-env:
     runs-on: ubuntu-latest
