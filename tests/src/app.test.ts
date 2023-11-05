@@ -22,8 +22,8 @@ describe('all-green-checks', () => {
     })
     setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
 
-    process.env['INPUT_IGNORE-JOBS'] = 'alls-green-check'
-    process.env['INPUT_CHECK-INTERVAL'] = '5'
+    process.env.INPUT_IGNORE = 'alls-green-check'
+    process.env.INPUT_INTERVAL = '5'
     process.env.GITHUB_SHA = 'd66adf86fb244c1511ed4ebbb8710dfab0f6ae1a'
   })
 
@@ -49,7 +49,7 @@ describe('all-green-checks', () => {
   it('should setFailed when check-interval is not a number', async () => {
     // Arrange
     const payload = 'pull_request.opened.json'
-    process.env['INPUT_CHECK-INTERVAL'] = 'not a number'
+    process.env.INPUT_INTERVAL = 'not a number'
 
     // Act
     await action.receive({ name: 'pull_request', payload })
@@ -61,7 +61,7 @@ describe('all-green-checks', () => {
   it('should setFailed when check-interval is not a positive number', async () => {
     // Arrange
     const payload = 'pull_request.opened.json'
-    process.env['INPUT_CHECK-INTERVAL'] = '0'
+    process.env.INPUT_INTERVAL = '0'
 
     // Act
     await action.receive({ name: 'pull_request', payload })
@@ -103,7 +103,7 @@ describe('all-green-checks', () => {
     // Arrange
     const payload = 'pull_request.opened.json'
     const checksFailure = getFixture('check_runs.completed.failure.json')
-    process.env['INPUT_IGNORE-JOBS'] = 'alls-green-check,Unit tests'
+    process.env.INPUT_IGNORE = 'alls-green-check,Unit tests'
 
     nock('https://api.github.com/')
       .get('/repos/pedrox-hs/all-green-checks/commits/d66adf86fb244c1511ed4ebbb8710dfab0f6ae1a/check-runs')

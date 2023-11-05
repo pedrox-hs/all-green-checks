@@ -30,8 +30,8 @@ export class VersionControlSystemRepository implements IVersionControlSystemRepo
       .forEach((key) => {
         this.logger.info(`${key}: ${process.env[key]}`)
       })
-    const checkInterval = core.getInput('check-interval', { required: true, trimWhitespace: true })
-    const ignoredJobs = core.getInput('ignore-jobs', { required: true })
+    const checkInterval = core.getInput('interval', { required: true, trimWhitespace: true })
+    const ignoredJobs = core.getInput('ignore', { required: true })
 
     return {
       ignoredJobs: ignoredJobs.split(/(,|\n)/).map((job) => job.trim()),

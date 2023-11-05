@@ -3,11 +3,11 @@ description: "Action to verify run checks"
 author: "Pedro Silva"
 
 inputs:
-  ignore-jobs:
+  ignore:
     description: "Jobs to ignore checking, separated by comma or new line"
     default: ${{ github.job }}
     required: true
-  check-interval:
+  interval:
     description: "Interval between checks in seconds"
     default: "30"
     required: true
@@ -20,6 +20,6 @@ runs:
   using: docker
   image: Dockerfile
   env:
-    INPUT_IGNORE-JOBS: ${{ inputs.ignore-jobs }}
-    INPUT_CHECK-INTERVAL: ${{ inputs.check-interval }}
+    INPUT_IGNORE: ${{ inputs.ignore }}
+    INPUT_INTERVAL: ${{ inputs.interval }}
     INPUT_REF: ${{ inputs.ref }}
