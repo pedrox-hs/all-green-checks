@@ -1,15 +1,15 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import { Context } from '@actions/github/lib/context'
-import { ConsoleTransport, StyledConsoleFormatter, Transport, createLogger } from 'nautilustar-debug'
+import { RestEndpointMethods } from '@octokit/plugin-rest-endpoint-methods/dist-types/generated/method-types'
+import { Transport, createLogger } from 'nautilustar-debug'
 import { Log } from 'nautilustar-debug/dist/Log'
+import fetch from 'node-fetch'
 import { container, instanceCachingFactory } from 'tsyringe'
 import { VersionControlSystemRepository } from '../data/repository'
 import { IsAllChecksCompletedUseCase } from '../domain/IsAllChecksCompleted'
 import { IVersionControlSystemRepository } from '../domain/repository'
 import { Logger } from '../utils'
-import { RestEndpointMethods } from '@octokit/plugin-rest-endpoint-methods/dist-types/generated/method-types'
-import fetch from 'node-fetch'
 
 class ActionLogTransport implements Transport {
   log (data: Log.Data): void {
@@ -32,10 +32,7 @@ export default container
         () => createLogger({
           transporters: [
             new ActionLogTransport(),
-            new ConsoleTransport({
-              formatter: new StyledConsoleFormatter(),
-            }),
-          ].slice(0, 1),
+          ],
         }),
       ),
     },

@@ -25,11 +25,6 @@ export class VersionControlSystemRepository implements IVersionControlSystemRepo
   }
 
   async getOptions (): Promise<Options> {
-    Object.keys(process.env)
-      .filter(k => k.startsWith('INPUT'))
-      .forEach((key) => {
-        this.logger.info(`${key}: ${process.env[key]}`)
-      })
     const checkInterval = core.getInput('interval', { required: true, trimWhitespace: true })
     const ignoredJobs = core.getInput('ignore', { required: true })
 
