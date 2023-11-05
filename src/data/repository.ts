@@ -4,23 +4,33 @@ import type { RestEndpointMethods } from '@octokit/plugin-rest-endpoint-methods/
 import { inject, injectable } from 'tsyringe'
 import { CheckRun, Conclusion, Options, Status } from '../domain/entities'
 import { IVersionControlSystemRepository } from '../domain/repository'
+import { Logger } from '../utils'
 
 @injectable()
 export class VersionControlSystemRepository implements IVersionControlSystemRepository {
   private context: Context
   private client: RestEndpointMethods
+  private logger: Logger
 
   constructor (
     context: Context,
     @inject('RestEndpointMethods')
     client: RestEndpointMethods,
+    @inject('Logger')
+    logger: Logger,
   ) {
     this.context = context
     this.client = client
+    this.logger = logger
   }
 
   async getOptions (): Promise<Options> {
-    const checkInterval = core.getInput('check-interval', { required: true })
+    Object.keys(process.env)
+      .filter(k => k.startsWith('INPUT'))
+      .forEach((key) => {
+        this.logger.info(`${key}: ${process.env[key]}`)
+      })
+    const checkInterval = core.getInput('check-interval', { required: true, trimWhitespace: true })
     const ignoredJobs = core.getInput('ignore-jobs', { required: true })
 
     return {
