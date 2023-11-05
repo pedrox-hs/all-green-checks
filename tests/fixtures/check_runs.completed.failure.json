@@ -1,0 +1,59 @@
+{
+  "total_count": 3,
+  "check_runs": [
+    {
+      "id": 18366940338,
+      "name": "alls-green-check",
+      "node_id": "CR_kwDOKpCA7s8AAAAERsFEsg",
+      "head_sha": "d66adf86fb244c1511ed4ebbb8710dfab0f6ae1a",
+      "external_id": "e8dcf89b-09f1-55ad-fdc5-aae9b52ecaba",
+      "url": "https://api.github.com/repos/pedrox-hs/all-green-checks/check-runs/18366940338",
+      "html_url": "https://github.com/pedrox-hs/all-green-checks/actions/runs/6756936493/job/18366940338",
+      "details_url": "https://github.com/pedrox-hs/all-green-checks/actions/runs/6756936493/job/18366940338",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2023-11-04T20:09:18Z",
+      "completed_at": "2023-11-04T20:10:46Z",
+      "check_suite": {
+        "id": 17909727128
+      },
+      "pull_requests": []
+    },
+    {
+      "id": 18366940266,
+      "name": "Lint",
+      "node_id": "CR_kwDOKpCA7s8AAAAERsFEag",
+      "head_sha": "d66adf86fb244c1511ed4ebbb8710dfab0f6ae1a",
+      "external_id": "3a559e2a-952e-58d2-b8db-2e604a9266d7",
+      "url": "https://api.github.com/repos/pedrox-hs/all-green-checks/check-runs/18366940266",
+      "html_url": "https://github.com/pedrox-hs/all-green-checks/actions/runs/6756936498/job/18366940266",
+      "details_url": "https://github.com/pedrox-hs/all-green-checks/actions/runs/6756936498/job/18366940266",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2023-11-04T20:09:15Z",
+      "completed_at": "2023-11-04T20:09:28Z",
+      "check_suite": {
+        "id": 17909727135
+      },
+      "pull_requests": []
+    },
+    {
+      "id": 18366940202,
+      "name": "Unit tests",
+      "node_id": "CR_kwDOKpCA7s8AAAAERsFEKg",
+      "head_sha": "d66adf86fb244c1511ed4ebbb8710dfab0f6ae1a",
+      "external_id": "b8245a8d-c8fe-58cd-5361-3fdfc2c073c3",
+      "url": "https://api.github.com/repos/pedrox-hs/all-green-checks/check-runs/18366940202",
+      "html_url": "https://github.com/pedrox-hs/all-green-checks/actions/runs/6756936498/job/18366940202",
+      "details_url": "https://github.com/pedrox-hs/all-green-checks/actions/runs/6756936498/job/18366940202",
+      "status": "completed",
+      "conclusion": "failure",
+      "started_at": "2023-11-04T20:09:17Z",
+      "completed_at": "2023-11-04T20:10:00Z",
+      "check_suite": {
+        "id": 17909727135
+      },
+      "pull_requests": []
+    }
+  ]
+}

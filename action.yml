@@ -3,18 +3,23 @@ description: "Action to verify run checks"
 author: "Pedro Silva"
 
 inputs:
-  self-job-name:
-    description: "Name of the job that will be used to check the status"
+  ignore-jobs:
+    description: "Jobs to ignore checking, separated by comma or new line"
     default: ${{ github.job }}
     required: true
   check-interval:
     description: "Interval between checks in seconds"
     default: "30"
     required: true
+  ref:
+    description: "Ref to check the status"
+    default: ${{ github.event.pull_request.head.sha || github.sha }}
+    required: true
 
 runs:
   using: docker
   image: Dockerfile
   env:
-    INPUT_SELF-JOB-NAME: ${{ inputs.self-job-name }}
+    INPUT_IGNORE-JOBS: ${{ inputs.ignore-jobs }}
     INPUT_CHECK-INTERVAL: ${{ inputs.check-interval }}
+    INPUT_REF: ${{ inputs.ref }}

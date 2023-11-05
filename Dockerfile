@@ -1,11 +1,13 @@
 FROM node:slim
 
-RUN mkdir -p /app
-WORKDIR /app
+ENV NODE_ENV="production"
+
+WORKDIR /usr/src/app
 
 COPY . .
 
-RUN npm install --omit=dev && \
-  npm run build
+RUN npm ci --omit=dev && \
+  npm run build && \
+  npm cache clean --force
 
-ENTRYPOINT ["node", "/app/dist/index.js"]
+ENTRYPOINT ["npm", "--prefix", "/usr/src/app", "start"]

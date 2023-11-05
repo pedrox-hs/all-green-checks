@@ -13,13 +13,16 @@
     "noUnusedLocals": false,
     "pretty": true,
     "strict": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "outDir": "./dist",
     "skipLibCheck": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
-    "declaration": true,
-    "resolveJsonModule": true
+    "declaration": false,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "removeComments": true,
   },
   "include": [
     "src/**/*"

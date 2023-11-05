@@ -1,8 +1,5 @@
-import app from './app'
-import githubActions from '@probot/adapter-github-actions'
+import 'reflect-metadata'
+import container from './di'
+import { main } from './gateway'
 
-githubActions.run(app)
-  .catch((error) => {
-    console.error(error)
-    process.exit(1)
-  })
+main(container)
