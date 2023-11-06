@@ -1,0 +1,32 @@
+{
+  "preset": "ts-jest",
+  "testEnvironment": "node",
+  "roots": [
+    "<rootDir>/src",
+    "<rootDir>/tests"
+  ],
+  "testMatch": [
+    "**/tests/**/*.test.ts"
+  ],
+  "transform": {
+    "^.+\\.ts$": [
+      "ts-jest",
+      {
+        "tsconfig": {
+          "sourceMap": true,
+          "declaration": true,
+          "declarationMap": true,
+          "removeComments": false,
+          "preserveConstEnums": true,
+          "preserveValueImports": true,
+          "importsNotUsedAsValues": "preserve"
+        }
+      }
+    ]
+  },
+  "collectCoverage": true,
+  "coverageProvider": "v8",
+  "collectCoverageFrom": [
+    "src/**/*"
+  ]
+}

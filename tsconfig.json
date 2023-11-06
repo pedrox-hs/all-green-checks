@@ -3,11 +3,12 @@
     "allowJs": false,
     "lib": [
       "es2015",
-      "es2017"
+      "es2017",
+      "es2022"
     ],
     "module": "commonjs",
     "moduleResolution": "node",
-    "target": "es5",
+    "target": "es2022",
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "noUnusedLocals": false,
@@ -23,6 +24,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "removeComments": true,
+    "forceConsistentCasingInFileNames": true,
   },
   "include": [
     "src/**/*"

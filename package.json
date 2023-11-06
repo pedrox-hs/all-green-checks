@@ -12,8 +12,7 @@
     "start": "node dist/index.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "test": "jest tests/**/*.test.*",
-    "test:coverage": "jest --collect-coverage --coverage-provider=v8 tests/**/*.test.*"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -31,7 +30,6 @@
   "dependencies": {
     "@actions/core": "^1.10.1",
     "@actions/github": "^6.0.0",
-    "@octokit/plugin-rest-endpoint-methods": "^10.1.2",
     "@octokit/webhooks-types": "^7.3.1",
     "@types/node": "^20.8.10",
     "@types/node-fetch": "^2.6.8",
@@ -42,10 +40,6 @@
     "typescript": "^5.2.2"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-decorators": "^7.23.2",
-    "@babel/preset-env": "^7.23.2",
-    "@babel/preset-typescript": "^7.23.2",
-    "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.7",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
     "@typescript-eslint/parser": "^6.9.1",
