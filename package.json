@@ -9,7 +9,7 @@
   "scripts": {
     "build": "tsc",
     "build:ncc": "ncc build src/gateway/action.ts --no-source-map-register -o dist",
-    "start": "node dist/index.js",
+    "start": "node dist/gateway/action.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "jest"
