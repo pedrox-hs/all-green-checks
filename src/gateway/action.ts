@@ -1,13 +1,14 @@
-import { DependencyContainer } from 'tsyringe'
+import 'reflect-metadata'
+
+import container from '../di'
 import { WaitUntilAllChecksCompletedUseCase } from '../domain/WaitUntilAllChecksCompleted'
 import { Logger } from '../utils'
 
-export async function main (container: DependencyContainer) {
+export default async function main () {
   const logger = container.resolve<Logger>('Logger')
   try {
-    const token = process.env.GITHUB_TOKEN
+    const token = container.resolve('GITHUB_TOKEN')
     if (!token) throw new Error('The `GITHUB_TOKEN` must be set')
-    container.register('GITHUB_TOKEN', { useValue: token })
 
     const waitUntilAllChecksCompleted = container.resolve(WaitUntilAllChecksCompletedUseCase)
     await waitUntilAllChecksCompleted.run()
@@ -15,3 +16,6 @@ export async function main (container: DependencyContainer) {
     logger.error(error)
   }
 }
+
+/* c8 ignore next */
+if (require.main === module) main()

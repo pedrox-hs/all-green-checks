@@ -1,11 +1,11 @@
-import * as core from '@actions/core'
-import * as github from '@actions/github'
+import { info, setFailed } from '@actions/core'
+import { context, getOctokit } from '@actions/github'
 import { Context } from '@actions/github/lib/context'
-import { RestEndpointMethods } from '@octokit/plugin-rest-endpoint-methods/dist-types/generated/method-types'
 import { Transport, createLogger } from 'nautilustar-debug'
 import { Log } from 'nautilustar-debug/dist/Log'
 import fetch from 'node-fetch'
 import { container, instanceCachingFactory } from 'tsyringe'
+import { Client } from '../data/client'
 import { VersionControlSystemRepository } from '../data/repository'
 import { IsAllChecksCompletedUseCase } from '../domain/IsAllChecksCompleted'
 import { IVersionControlSystemRepository } from '../domain/repository'
@@ -15,10 +15,10 @@ class ActionLogTransport implements Transport {
   log (data: Log.Data): void {
     switch (data.level) {
       case Log.Level.ERROR:
-        core.setFailed(data.message)
+        setFailed(data.message)
         break
       case Log.Level.INFO:
-        core.info(data.message)
+        info(data.message)
         break
     }
   }
@@ -52,18 +52,24 @@ export default container
   .register<Context>(
     'Context',
     {
-      useValue: github.context,
+      useValue: context,
     },
   )
-  .register<RestEndpointMethods>(
-    'RestEndpointMethods',
+  .register<string>(
+    'GITHUB_TOKEN',
+    {
+      useFactory: () => process.env.GITHUB_TOKEN || '',
+    },
+  )
+  .register<Client>(
+    'Client',
     {
       useFactory: (container) => {
         const token = container.resolve<string>('GITHUB_TOKEN')
 
-        return github.getOctokit(token, {
+        return getOctokit(token, {
           request: { fetch },
-        }).rest
+        })
       },
     },
   )

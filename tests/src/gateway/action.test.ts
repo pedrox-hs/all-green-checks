@@ -1,7 +1,8 @@
 import * as core from '@actions/core'
 import nock from 'nock'
-import * as action from '../helpers/action'
-import { getFixture } from '../helpers/fixtures'
+import * as action from '../../helpers/action'
+import { getFixture } from '../../helpers/fixtures'
+import { fakeSetTimeout } from '../../helpers/timer'
 
 describe('all-green-checks', () => {
   let setFailedMock: jest.SpyInstance
@@ -16,31 +17,32 @@ describe('all-green-checks', () => {
 
   beforeEach(() => {
     jest.spyOn(core, 'info').mockImplementation()
-    jest.spyOn(global, 'setTimeout').mockImplementation((cb) => {
-      cb()
-      return 0 as unknown as NodeJS.Timeout
-    })
+    jest.spyOn(global, 'setTimeout').mockImplementation(fakeSetTimeout)
     setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
 
+    process.env.GITHUB_TOKEN = 'dummy'
+    process.env.GITHUB_SHA = 'd66adf86fb244c1511ed4ebbb8710dfab0f6ae1a'
     process.env.INPUT_IGNORE = 'alls-green-check'
     process.env.INPUT_INTERVAL = '5'
-    process.env.GITHUB_SHA = 'd66adf86fb244c1511ed4ebbb8710dfab0f6ae1a'
   })
 
   afterEach(() => {
-    delete process.env.INPUT_REF
     jest.clearAllMocks()
     nock.cleanAll()
+    delete process.env.GITHUB_TOKEN
+    delete process.env.GITHUB_SHA
+    delete process.env.INPUT_REF
+    delete process.env.INPUT_IGNORE
+    delete process.env.INPUT_INTERVAL
   })
 
   it('should setFailed when has not github token', async () => {
     // Arrange
     const payload = 'pull_request.opened.json'
+    delete process.env.GITHUB_TOKEN
 
     // Act
-    await action.receive({ name: 'pull_request', payload }, async () => {
-      delete process.env.GITHUB_TOKEN
-    })
+    await action.receive({ name: 'pull_request', payload })
 
     // Assert
     expect(setFailedMock).toHaveBeenCalledWith(expect.stringContaining('The `GITHUB_TOKEN` must be set'))
@@ -72,10 +74,10 @@ describe('all-green-checks', () => {
 
   it('should wait jobs to complete', async () => {
     // Arrange
-    process.env.INPUT_REF = 'd66adf86fb244c1511ed4ebbb8710dfab0f6ae1a'
     const payload = 'pull_request.opened.json'
     const checksInProgress = getFixture('check_runs.in_progress.json')
     const checksCompleted = getFixture('check_runs.completed.success.json')
+    process.env.INPUT_REF = 'd66adf86fb244c1511ed4ebbb8710dfab0f6ae1a'
 
     nock('https://api.github.com/')
       .get('/repos/pedrox-hs/all-green-checks/commits/d66adf86fb244c1511ed4ebbb8710dfab0f6ae1a/check-runs')
@@ -97,6 +99,7 @@ describe('all-green-checks', () => {
     // Assert
     expect(setFailedMock).not.toHaveBeenCalled()
     expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 5000)
+    expect(nock.isDone()).toBe(true)
   })
 
   it('should ignore jobs from list', async () => {
@@ -117,6 +120,7 @@ describe('all-green-checks', () => {
 
     // Assert
     expect(setFailedMock).not.toHaveBeenCalledWith()
+    expect(nock.isDone()).toBe(true)
   })
 
   it('should fail when has any job failure', async () => {
@@ -136,13 +140,14 @@ describe('all-green-checks', () => {
 
     // Assert
     expect(setFailedMock).toHaveBeenCalledWith(expect.stringContaining('Not all checks are successful'))
+    expect(nock.isDone()).toBe(true)
   })
 
   it('should get ref from input', async () => {
     // Arrange
-    process.env.INPUT_REF = 'b26ee87e782e47bf20ca4731437dd62beb27b142'
     const payload = 'pull_request.opened.json'
     const checksCompleted = getFixture('check_runs.completed.success.json')
+    process.env.INPUT_REF = 'b26ee87e782e47bf20ca4731437dd62beb27b142'
 
     nock('https://api.github.com/')
       .get('/repos/pedrox-hs/all-green-checks/commits/b26ee87e782e47bf20ca4731437dd62beb27b142/check-runs')
@@ -156,13 +161,14 @@ describe('all-green-checks', () => {
 
     // Assert
     expect(setFailedMock).not.toHaveBeenCalled()
+    expect(nock.isDone()).toBe(true)
   })
 
   it('should get ref from env', async () => {
     // Arrange
-    process.env.GITHUB_SHA = 'cb581c31907eac7f62cbefe367aa7ab3075ee925'
     const payload = 'pull_request.opened.json'
     const checksCompleted = getFixture('check_runs.completed.success.json')
+    process.env.GITHUB_SHA = 'cb581c31907eac7f62cbefe367aa7ab3075ee925'
 
     nock('https://api.github.com/')
       .get('/repos/pedrox-hs/all-green-checks/commits/cb581c31907eac7f62cbefe367aa7ab3075ee925/check-runs')
@@ -176,9 +182,10 @@ describe('all-green-checks', () => {
 
     // Assert
     expect(setFailedMock).not.toHaveBeenCalled()
+    expect(nock.isDone()).toBe(true)
   })
 
-  it('should successful when all jobs are completed successful', async () => {
+  it('should success when all jobs are successful completed', async () => {
     // Arrange
     const payload = 'pull_request.opened.json'
     const checksPayload = getFixture('check_runs.completed.success.json')
@@ -195,5 +202,6 @@ describe('all-green-checks', () => {
 
     // Assert
     expect(setFailedMock).not.toHaveBeenCalled()
+    expect(nock.isDone()).toBe(true)
   })
 })

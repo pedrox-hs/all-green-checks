@@ -1,9 +1,5 @@
-import 'reflect-metadata'
-
-import container from '../../src/di'
-import * as app from '../../src/gateway'
+import action from '../../src/gateway/action'
 import { getFixturePath } from './fixtures'
-import { DependencyContainer } from 'tsyringe'
 
 export type Path = string
 
@@ -13,17 +9,13 @@ export type Event = {
   payload: Path
 }
 
-export async function receive (event: Event, beforeRun?: (container: DependencyContainer) => void) {
+export async function receive (event: Event) {
   setup(event)
-  if (beforeRun) {
-    beforeRun(container)
-  }
-  await app.main(container)
+  await action()
   reset()
 }
 
 function setup (event: Event) {
-  process.env.GITHUB_TOKEN = 'dummy'
   process.env.GITHUB_REPOSITORY = 'pedrox-hs/all-green-checks'
   process.env.GITHUB_RUN_ID = event.id
   process.env.GITHUB_EVENT_NAME = event.name
@@ -31,7 +23,6 @@ function setup (event: Event) {
 }
 
 function reset () {
-  delete process.env.GITHUB_TOKEN
   delete process.env.GITHUB_REPOSITORY
   delete process.env.GITHUB_RUN_ID
   delete process.env.GITHUB_EVENT_NAME
