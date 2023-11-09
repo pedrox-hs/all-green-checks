@@ -29,10 +29,11 @@ export class IsAllChecksCompletedUseCase {
     const checkRuns = await this.repository.getCheckRuns()
       .then((checks) => checks.filter(checkRun => !ignoredJobs.includes(checkRun.name)))
 
+    const formattedChecks = checkRuns.map(checkRun => `${checkRun.name} (${checkRun.conclusion ?? checkRun.status})`)
+    this.logger.info(`Checks: ${formattedChecks.join(', ')}`)
+
     const pendingChecks = checkRuns.filter(checkRun => checkRun.status !== Status.Completed)
     if (pendingChecks.length > 0) {
-      const formattedPendingChecks = pendingChecks.map(checkRun => `${checkRun.name} (${checkRun.status})`)
-      this.logger.info(`Pending checks: ${formattedPendingChecks.join(', ')}`)
       return false
     }
 
