@@ -1,5 +1,5 @@
 {
-  "total_count": 3,
+  "total_count": 4,
   "check_runs": [
     {
       "id": 18366940338,
@@ -52,6 +52,24 @@
       "completed_at": "2023-11-04T20:10:00Z",
       "check_suite": {
         "id": 17909727135
+      },
+      "pull_requests": []
+    },
+    {
+      "id": 18366940400,
+      "name": "Dependency check",
+      "node_id": "CR_kwDOKpCA7s8AAAAERsFExx",
+      "head_sha": "d66adf86fb244c1511ed4ebbb8710dfab0f6ae1a",
+      "external_id": "a9c1d2e3-4567-89ab-cdef-0123456789ab",
+      "url": "https://api.github.com/repos/pedrox-hs/all-green-checks/check-runs/18366940400",
+      "html_url": "https://github.com/pedrox-hs/all-green-checks/actions/runs/6756936499/job/18366940400",
+      "details_url": "https://github.com/pedrox-hs/all-green-checks/actions/runs/6756936499/job/18366940400",
+      "status": "completed",
+      "conclusion": "skipped",
+      "started_at": "2023-11-04T20:09:30Z",
+      "completed_at": "2023-11-04T20:09:40Z",
+      "check_suite": {
+        "id": 17909727140
       },
       "pull_requests": []
     }

@@ -7,6 +7,7 @@ import { Conclusion, Job, Status } from './entities'
 export class IsAllChecksCompletedUseCase {
   private logger: Logger
   private repository: IVersionControlSystemRepository
+  private allowedConclusion: Array<Conclusion | null> = [Conclusion.Success, Conclusion.Neutral, Conclusion.Skipped]
 
   constructor (
     @inject('Logger')
@@ -38,7 +39,7 @@ export class IsAllChecksCompletedUseCase {
     }
 
     const allSuccess = checkRuns
-      .every(checkRun => checkRun.conclusion === Conclusion.Success || checkRun.conclusion === Conclusion.Neutral)
+      .every(checkRun => this.allowedConclusion.includes(checkRun.conclusion))
 
     if (!allSuccess) throw new Error('Not all checks are successful')
 
